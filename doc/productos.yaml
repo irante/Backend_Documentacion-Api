@@ -1,0 +1,159 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtener todos los productos
+      tags:
+        - Products
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        500:          
+          description: Failure
+    post:
+      summary: Agregar un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/Product'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/responses/ProductPostSuccess'
+        500:
+          description: Failure
+
+
+  /api/products/{id}:
+    get:
+      summary: Obtener productos por id
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: El id del producto tomado de mongo
+          schema:
+              $type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                $ref: '#components/schemas/Success'
+        500:
+          description: Failure        
+    put:
+      summary: Actualizar productos por id
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: El id del producto tomado de mongo
+          schema:
+              $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/responses/ProductPostSuccess'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                $ref: '#components/schemas/Success'
+        500:
+          description: Failure
+        
+    delete:  
+      summary: Eliminar productos por id
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: El id del producto tomado de mongo
+          schema:
+              $type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                $ref: '#components/schemas/Success'
+        500:
+          description: Failure        
+
+components:
+  responses:
+    ProductPostSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+        payload:
+          type: object
+          $ref: '#components/schemas/Product'
+  schemas:
+    Success:
+      type: object
+      properties:
+        status:
+          type: string
+        message: 
+          type: string
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+          required: true
+          description: Titulo del producto
+        descripcion:
+          type: string
+          required: true
+          description: Descripcion del producto
+        price:
+          type: number
+          required: true
+          description: Precio del producto
+        code:
+          type: string
+          description: Codigo del producto
+        stock:
+          type: number
+          default: 0
+          description: Stock del producto
+       
+      example:
+        title: Mouse Microsoft
+        descripcion: Mouse Bluetooth Ergonomic Mouse
+        price: 29700
+        code: f4f5dff56
+        stock: 15
+  
+
+
+

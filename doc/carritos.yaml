@@ -1,0 +1,199 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtener todos los carritos.
+      tags:
+        - Carts
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+        500:
+          description: Failure
+    post:
+      summary: Generar un nuevo Carrito
+      tags:
+        - Carts
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/CartPostSuccess'
+        500:
+          description: Failure
+  /api/carts/{cid}:
+    get:
+      summary: Obtener carrito por id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del carrito tomado de Mongo
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Failure
+    put:
+      summary: Modificar un carrito por id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del carrito tomado de mongo
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/responses/CartPostSuccess'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Failure
+    delete:
+      summary: Eliminar Carrito por id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del carrito tomado de mongo
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Failure
+  /api/carts/{cid}/products/{idProduct}:
+    post:
+      summary: Crear un producto dentro del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del carrito tomado de mongo
+          schema:
+            type: string
+        - name: idProduct
+          in: path
+          required: true
+          description: El id del producto tomado de mongo
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/responses/CartPostSuccess'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Failure
+    delete:
+      summary: Eliminar un producto dentro del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del carrito tomado of mongo
+          schema:
+            type: string
+        - name: idProduct
+          in: path
+          required: true
+          description: El id del producto tomado de mongo
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/responses/CartPostSuccess'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+
+components:
+  responses:
+    CartPostSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+        payload:
+          type: object
+          $ref: '#/components/schemas/Cart'
+  schemas:
+    Success:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+          description: Id de Mongo
+        user:
+          type: string
+          description: Usuario
+        products:
+          type: array
+          default: []
+          description: Productos dentro del carrito
